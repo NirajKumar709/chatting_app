@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ class ChatBot extends StatefulWidget {
 class _ChatBotState extends State<ChatBot> {
   TextEditingController messageController = TextEditingController();
 
-  List<DataModel> data = [];
+  List<DataModel> dataList = [];
 
   sendMessage({required String message}) {
-    data.add(DataModel(message: message, isSender: true));
+    dataList.add(DataModel(message: message, isSender: true));
     print(message);
     setState(() {});
   }
@@ -26,37 +27,50 @@ class _ChatBotState extends State<ChatBot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Chat With Ai"), centerTitle: true),
-      body: Column(
-        children: [
-          Expanded(child: Text(data.toString())),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: messageController,
-                    decoration: InputDecoration(
-                      hintText: "Search for anything",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: dataList.length,
+                itemBuilder:
+                    (context, index) => BubbleSpecialThree(
+                      text: dataList[index].message,
+                      color: Color(0xFFE8E8EE),
+                      tail: true,
+                      isSender: dataList[index].isSender,
+                    ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        hintText: "Search for anything",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    sendMessage(message: messageController.text);
-                    aiMessage(message: messageController.text);
+                  IconButton(
+                    onPressed: () {
+                      sendMessage(message: messageController.text);
+                      aiMessage(message: messageController.text);
 
-                    messageController.clear();
-                  },
-                  icon: Icon(Icons.send),
-                ),
-              ],
+                      messageController.clear();
+                    },
+                    icon: Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -83,9 +97,11 @@ class _ChatBotState extends State<ChatBot> {
       final aiDataStore =
           jsonDecoded["candidates"][0]["content"]["parts"][0]["text"];
 
-      data.add(DataModel(message: aiDataStore, isSender: false));
+      dataList.add(DataModel(message: aiDataStore, isSender: false));
+
       print(aiDataStore);
     }
+    setState(() {});
   }
 }
 
