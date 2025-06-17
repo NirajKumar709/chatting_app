@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:all_implement_project/gemini_chat_bot_support/chat_bot.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
