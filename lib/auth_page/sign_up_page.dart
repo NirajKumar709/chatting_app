@@ -33,25 +33,21 @@ class _SignUpPageState extends State<SignUpPage> {
     if (email.contains("@gmail.com")) {
       try {
         final credential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) async {
-              SharedPreferences sf = await SharedPreferences.getInstance();
-              sf.setString("userData", email);
+            .createUserWithEmailAndPassword(email: email, password: password);
 
-              FirebaseFirestore fireStore = FirebaseFirestore.instance;
-              fireStore
-                  .collection("newUsers")
-                  .doc()
-                  .set({"name": name, "email": email})
-                  .then((value) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInPage()),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Account Successfully Created")),
-                    );
-                  });
+        FirebaseFirestore fireStore = FirebaseFirestore.instance;
+        fireStore
+            .collection("newUsers")
+            .doc(credential.user!.uid)
+            .set({"name": name, "email": email, "Uid": credential.user!.uid})
+            .then((value) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SignInPage()),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Account Successfully Created")),
+              );
             });
       } catch (e) {
         print(e);

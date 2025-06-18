@@ -2,6 +2,9 @@ import 'package:all_implement_project/auth_page/sign_up_page.dart';
 import 'package:all_implement_project/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -26,7 +29,18 @@ class _SignInPageState extends State<SignInPage> {
       try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((value) {
+            .then((value) async {
+              SharedPreferences sf = await SharedPreferences.getInstance();
+              sf.setString("userData", value.user!.uid);
+
+              print(value.user!.uid);
+
+              userId = value.user!.uid;
+              print(userId);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Account Successfully Login")),
+              );
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),

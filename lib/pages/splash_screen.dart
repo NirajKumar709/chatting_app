@@ -1,4 +1,5 @@
 import 'package:all_implement_project/auth_page/sign_in_page.dart';
+import 'package:all_implement_project/main.dart';
 import 'package:all_implement_project/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,23 +21,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   navigateToNextScreen() async {
     SharedPreferences sf = await SharedPreferences.getInstance();
-    final data = sf.get("userData");
+    String? data = sf.getString("userData") ?? "";
 
-    if (data != null) {
-      Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 3), () {
+      if (data != "") {
+        userId = data;
+        print(userId);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
         );
-      });
-    } else {
-      Future.delayed(Duration(seconds: 3), () {
+      } else {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => SignInPage()),
         );
-      });
-    }
+      }
+    });
   }
 
   @override
