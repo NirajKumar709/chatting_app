@@ -25,8 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(Duration(seconds: 3), () {
       if (data != "") {
-        userId = data;
-        print(userId);
+        myUserId = data;
+
+        print(myUserId);
 
         Navigator.pushReplacement(
           context,

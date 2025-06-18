@@ -35,8 +35,8 @@ class _SignInPageState extends State<SignInPage> {
 
               print(value.user!.uid);
 
-              userId = value.user!.uid;
-              print(userId);
+              myUserId = value.user!.uid;
+              print(myUserId);
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Account Successfully Login")),

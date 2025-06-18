@@ -31,7 +31,7 @@ class _AllUserHereState extends State<AllUserHere> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(userId)),
+      appBar: AppBar(title: Text(myUserId)),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -44,7 +44,7 @@ class _AllUserHereState extends State<AllUserHere> {
                         Map<String, dynamic> personData =
                             dataStore[index].data() as Map<String, dynamic>;
 
-                        if (dataStore[index].id == userId) {
+                        if (dataStore[index].id == myUserId) {
                           return SizedBox();
                         } else {
                           return GestureDetector(
@@ -52,7 +52,11 @@ class _AllUserHereState extends State<AllUserHere> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatWithFriends(),
+                                  builder:
+                                      (context) => ChatWithFriends(
+                                        friendUserId: dataStore[index].id,
+                                        friendName: personData["name"],
+                                      ),
                                 ),
                               );
                             },
