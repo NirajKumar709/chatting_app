@@ -1,6 +1,6 @@
+import 'package:all_implement_project/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'chat_application/splash_screen.dart';
 import 'firebase_options.dart';
 
 String myUserId = "";
